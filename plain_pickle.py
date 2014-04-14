@@ -24,9 +24,6 @@ If not, see <http://www.gnu.org/licenses/>.
 '''
 
 
-import re
-
-
 class PlainPickle(object):
     '''
     A class to create and read sets of project parameters in a readable text
@@ -39,13 +36,6 @@ class PlainPickle(object):
         Constructor
         '''
         self.pj = {}
-        self.pattern = re.compile(r"""
-         ^(?P<key>.+)        # key
-         :\s*                # ignore : and whitespace
-         (?P<value>.+)       # value
-         \#\s*               # ignore # and whitespace
-         (?P<comment>.+)\s*  # comment
-         """, re.VERBOSE)
 
     def save(self, name='params.txt'):
         '''
@@ -72,11 +62,20 @@ class PlainPickle(object):
                 txt = read_file.read()
                 lines = txt.split('\n')
                 for line in lines:
-                    key = re.search(self.pattern, line)
-                    if key:
-                        self.pj[key.group('key')] = [
-                                                (key.group('value')).rstrip(),
-                                              (key.group('comment')).rstrip()]
+                    key = None
+                    value = None
+                    comment = None
+                    try:
+                        parts = line.split(':')
+                        key = (parts[0]).strip()
+                        vals = ((parts[1]).strip()).split('#')
+                        value = (vals[0]).strip()
+                        if value == '':
+                            value = None
+                        comment = (vals[1]).strip()
+                    except IndexError:
+                        pass
+                    self.pj[key] = [value, comment]
             return 0
         except SyntaxError:
             return 1  # File read error

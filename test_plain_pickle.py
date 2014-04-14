@@ -48,8 +48,24 @@ class Test(unittest.TestCase):
         values2 = self.TestPickle.pj.get('key2')
         if values2:
             assert values2[0] == 'value2'
+            assert values2[1] == None
         else:
-            assert false
+            assert False
+        values3 = self.TestPickle.pj.get('key3')
+        if values3:
+            assert values3[0] == None
+            assert values3[1] == None
+        else:
+            assert False
+        values4 = self.TestPickle.pj.get('key4')
+        if values4:
+            assert values4[0] == None
+            assert values4[1] == 'comment adgag'
+        else:
+            assert False
+
+    def testAddfield(self):
+        pass
 
 
 if __name__ == "__main__":
