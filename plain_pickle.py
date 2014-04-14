@@ -47,11 +47,11 @@ class PlainPickle(object):
         except:
             return 1
 
-    def add_field(self, field):
+    def add(self, key, value=None, comment=None):
         '''
         Add a data set to an object
         '''
-        pass
+        self.pj[key] = [value, comment]
 
     def read(self, name):
         '''
@@ -75,9 +75,12 @@ class PlainPickle(object):
                         comment = (vals[1]).strip()
                     except IndexError:
                         pass
-                    self.pj[key] = [value, comment]
+                    self.add(key, value, comment)
             return 0
         except SyntaxError:
             return 1  # File read error
         except FileNotFoundError:
             return 2  # File not found error
+
+    def clear(self):
+        self.pj.clear()
