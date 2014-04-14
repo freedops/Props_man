@@ -112,6 +112,20 @@ class Test(unittest.TestCase):
         if value4:
             assert False
 
+    def testSave(self):
+        try:
+            os.remove('params.txt')
+        except:
+            pass
+        TestPickle = plain_pickle.PlainPickle()
+        TestPickle.add('key_1', 'value_1', 'comment_1')
+        TestPickle.add('key_2', None, 'comment_2')
+        TestPickle.add('key_4', None, 'comment_4')
+        TestPickle.add('key_3')
+        TestPickle.save()
+        if not os.path.exists('params.txt'):
+            assert False
+
 if __name__ == "__main__":
     import sys
     sys.argv = ['', 'Test.testCreateFile']

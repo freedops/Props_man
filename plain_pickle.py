@@ -43,6 +43,13 @@ class PlainPickle(object):
         '''
         try:
             with open(name, 'w') as save_file:
+                for key, value in self.pj.items():
+                    if value[0] == None:
+                        value[0] = ''
+                    if value[1] == None:
+                        value[1] = ''
+                    save_file.writeline('{}: {} #{}'.format(key, value[0],
+                                                            value[1]))
                 return 0
         except:
             return 1
