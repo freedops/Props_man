@@ -119,12 +119,39 @@ class Test(unittest.TestCase):
             pass
         TestPickle = plain_pickle.PlainPickle()
         TestPickle.add('key_1', 'value_1', 'comment_1')
-        TestPickle.add('key_2', None, 'comment_2')
-        TestPickle.add('key_4', None, 'comment_4')
+        TestPickle.add('key_2', None, 'comment 2')
+        TestPickle.add('key_4', 'value 2', None)
         TestPickle.add('key_3')
         TestPickle.save()
         if not os.path.exists('params.txt'):
             assert False
+        TestPickle.clear()
+        value = TestPickle.pj.get('key_1')
+        if value:
+            assert False
+        TestPickle.read()
+        value = TestPickle.pj.get('key_1')
+        if value:
+            assert value == ['value_1', 'comment_1']
+        else:
+            assert False
+        value2 = TestPickle.pj.get('key_2')
+        if value2:
+            assert value2 == [None, 'comment 2']
+        else:
+            assert False
+        value3 = TestPickle.pj.get('key_3')
+        print(value3)
+        if value3:
+            assert value3 == [None, None]
+        else:
+            assert False
+        value4 = TestPickle.pj.get('key_4')
+        if value4:
+            assert value4 == ['value 2', None]
+        else:
+            assert False
+        
 
 if __name__ == "__main__":
     import sys

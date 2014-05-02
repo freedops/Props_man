@@ -36,6 +36,7 @@ class PlainPickle(object):
         Constructor
         '''
         self.pj = {}
+        self.pjd = {}
 
     def save(self, name='params.txt'):
         '''
@@ -44,12 +45,14 @@ class PlainPickle(object):
         try:
             with open(name, 'w') as save_file:
                 for key, value in self.pj.items():
+                    comment = '#'
                     if value[0] == None:
                         value[0] = ''
                     if value[1] == None:
+                        comment = ''
                         value[1] = ''
-                    save_file.writeline('{}: {} #{}'.format(key, value[0],
-                                                            value[1]))
+                    save_file.write('{}: {} {}{}\n'.format(key, value[0],
+                                                           comment, value[1]))
                 return 0
         except:
             return 1
@@ -59,8 +62,9 @@ class PlainPickle(object):
         Add a data set to an object
         '''
         self.pj[key] = [value, comment]
+        self.pjd[key] = value
 
-    def read(self, name):
+    def read(self, name='params.txt'):
         '''
         Read a plain text data file and try to extract information
         '''
