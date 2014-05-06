@@ -35,24 +35,29 @@ class PlainPickle(object):
         '''
         Constructor
         '''
-        self.pj = {}
-        self.pjd = {}
+        self.pjc = {}  # comments
+        self.pjd = {}  # data
 
     def save(self, name='params.txt'):
         '''
         Save an object to a text file
+        Keys with a comment, but no data are not saved
         '''
         try:
             with open(name, 'w') as save_file:
-                for key, value in self.pj.items():
-                    comment = '#'
-                    if value[0] == None:
-                        value[0] = ''
-                    if value[1] == None:
+                for key, value in self.pjd.items():
+                    comment_char = '#'
+                    if value == None:
+                        value = ''
+                    comment = ''
+                    try:
+                        comment = self.get_comment(key)
+                    except:
+                        pass
+                    if comment == None:
                         comment = ''
-                        value[1] = ''
-                    save_file.write('{}: {} {}{}\n'.format(key, value[0],
-                                                           comment, value[1]))
+                    save_file.write('{}: {} {}{}\n'.format(key, value,
+                                                    comment_char, comment))
                 return 0
         except:
             return 1
@@ -61,8 +66,18 @@ class PlainPickle(object):
         '''
         Add a data set to an object
         '''
-        self.pj[key] = [value, comment]
         self.pjd[key] = value
+        self.pjc[key] = comment
+
+    def get_set(self, key):
+        return [self.get_value(key), self.get_comment(key)]
+
+    def get_value(self, key):
+        return self.pjd[key]
+
+    def get_comment(self, key):
+        return self.pjc[key]
+
 
     def read(self, name='params.txt'):
         '''
@@ -84,6 +99,8 @@ class PlainPickle(object):
                         if value == '':
                             value = None
                         comment = (vals[1]).strip()
+                        if comment == '':
+                            comment = None
                     except IndexError:
                         pass
                     self.add(key, value, comment)
@@ -94,4 +111,5 @@ class PlainPickle(object):
             return 2  # File not found error
 
     def clear(self):
-        self.pj.clear()
+        self.pjc.clear()
+        self.pjd.clear()
