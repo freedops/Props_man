@@ -78,6 +78,12 @@ class PlainPickle(object):
     def get_comment(self, key):
         return self.pjc[key]
 
+    def exists(self, key):
+        try:
+            self.get_value(key)
+            return 1
+        except:
+            return 0
 
     def read(self, name='params.txt'):
         '''
@@ -92,9 +98,9 @@ class PlainPickle(object):
                     value = None
                     comment = None
                     try:
-                        parts = line.split(':')
+                        parts = line.split(':',1)
                         key = (parts[0]).strip()
-                        vals = ((parts[1]).strip()).split('#')
+                        vals = (parts[1].strip()).split('#', 1)
                         value = (vals[0]).strip()
                         if value == '':
                             value = None

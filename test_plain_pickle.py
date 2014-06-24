@@ -1,7 +1,26 @@
 '''
 Created on 9 Apr 2014
 
-@author: scott
+@author: Scott Reeve
+
+Copyright 2014 freedops.org
+
+This file is part of the freedops.org tools collection.
+
+The freedops.org tools collection is free software: you can redistribute it
+and/or modify it under the terms of the GNU General Public License as
+published by the Free Software Foundation, either version 3 of the License,
+or (at your option) any later version.
+
+The freedops.org tools collection is distributed in the hope that it will
+be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with the freedops.org tools collection.
+
+If not, see <http://www.gnu.org/licenses/>.
 '''
 import unittest
 import plain_pickle
@@ -124,6 +143,11 @@ class Test(unittest.TestCase):
         except:
             assert True
 
+    def testExists(self):
+        TestPickle = plain_pickle.PlainPickle()
+        TestPickle.add('key_1', 'value_1', 'comment_1')
+        assert TestPickle.exists('key_1')
+
     def testSave(self):
         try:
             os.remove('params.txt')
@@ -170,5 +194,4 @@ class Test(unittest.TestCase):
 
 if __name__ == "__main__":
     import sys
-    sys.argv = ['', 'Test.testCreateFile']
     unittest.main()
